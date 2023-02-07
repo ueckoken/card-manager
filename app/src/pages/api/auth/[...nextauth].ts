@@ -30,11 +30,16 @@ export default NextAuth({
   ],
   callbacks: {
     async jwt({ token, user, profile }) {
-      if (user) token.groups = profile?.groups;
+      console.log(profile);
+      if (user) {
+        token.groups = profile?.groups;
+        token.sub = profile?.sub;
+      }
       return token
     },
     async session({ session, token }: { session: Session, token: JWT }) {
       session.user.groups = token.groups
+      session.user.sub = token.sub
       return session
     },
   }
