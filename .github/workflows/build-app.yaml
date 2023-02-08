@@ -36,6 +36,6 @@ jobs:
           file: ./app/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/ueckoken/card-manager:${{ env.IMAGE_TAG }}
+          tags: ghcr.io/ueckoken/card-manager-app:${{ env.IMAGE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
