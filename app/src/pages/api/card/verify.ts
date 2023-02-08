@@ -8,7 +8,7 @@ export default async function handler(req: any, res: any) {
     return
   }
   // allow if api-key is valid
-  if (req.headers['x-api-key'] !== "a") {
+  if (req.headers['x-api-key'] !== process.env['API_KEY']) {
     res.status(401).json({ error: 'Unauthorized' });
     return;
   }
