@@ -31,7 +31,8 @@ export default async function handler(req: any, res: any) {
       data: {
         idm: idm,
         userId: sub,
-        name: name
+        name: name,
+        userName: session.user.name as string,
       }
     });
     res.json(newCard);

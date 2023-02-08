@@ -2,13 +2,14 @@ import { Card } from "@prisma/client";
 import { FC, useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 
-export const RegisteredCards: FC<{}> = () => {
-  // get users cards list from /api/card/list
+export const AllCards: FC<{}> = () => {
+  // get all cards from /api/card/all
+  // only allow to manger to access this page
 
   const [cards, setCards] = useState([])
   useEffect(() => {
     const fetchCards = async () => {
-      const res = await fetch('/api/card/list', {
+      const res = await fetch('/api/card/all', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -42,20 +43,24 @@ export const RegisteredCards: FC<{}> = () => {
 
   return (
     <div>
-      <h1>Registered Cards</h1>
+      <h1>All Cards</h1>
       <Table>
         <thead>
           <tr>
+            <th>利用者</th>
             <th>カードID</th>
             <th>カード名</th>
+            <th>有効期限</th>
             <th>削除</th>
           </tr>
         </thead>
         <tbody>
           {cards.map((card: Card) => (
             <tr key={card.idm}>
+              <td>{card.userName.split(' ')[1] +' '+ card.userName.split(' ')[0]}</td>
               <td>{card.idm}</td>
               <td>{card.name}</td>
+              <td>{card.expiredAt?card.expiredAt?.toDateString():"無期限"}</td>
               <td><a href="" onClick={()=>deleteCard(card.idm)}>削除</a></td>
             </tr>
           ))}

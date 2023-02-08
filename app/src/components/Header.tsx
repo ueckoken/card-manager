@@ -24,10 +24,14 @@ const Header: FC<{}> = () => {
             {!session && <Nav.Link onClick={()=>signIn("keycloak")}>Login</Nav.Link>}
             {(session) &&
               <NavDropdown title={session.user!.name} align="end">
-                <NavDropdown.Item>
-                  ユーザー設定
-                  <Button variant="outline-primary" size="sm" className="float-end" onClick={()=>console.log(session.user)}></Button>
+                <NavDropdown.Item href="/register">
+                  カード登録
                 </NavDropdown.Item>
+                {session.user?.groups?.includes('/manager') &&
+                  <NavDropdown.Item href="/admin">
+                    管理画面
+                  </NavDropdown.Item>
+                }
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={()=>signOut()}>
                   ログアウト

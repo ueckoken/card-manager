@@ -17,11 +17,6 @@ export default async function handler(req: any, res: any) {
         userId: sub
       }
     });
-
-    if (cards.length == 0) {
-      res.status(404).json({ error: 'Not found' });
-      return;
-    }
     res.json(cards);
   }
   // return method not allowed

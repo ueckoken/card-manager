@@ -28,7 +28,7 @@ export default function Register() {
     });
     if (res.status === 200) {
       alert('登録しました');
-      router.push('/');
+      window.location.reload()
     } else {
       alert('登録に失敗しました');
     }
@@ -48,7 +48,7 @@ export default function Register() {
     //@ts-ignore
    const device = await navigator.usb.requestDevice({ filters: [
       { vendorId: 0x054c}
-    ] });
+    ]});
     await device.open();
     setConnected(true);
     await device.selectConfiguration(1);
@@ -57,8 +57,12 @@ export default function Register() {
     try{
     while(true){
       const idm = await getIdm(device);
-      if(idm!='')
+      if(idm!=''){
         setCardId(idm);
+        device.close();
+        setConnected(false);
+        break;
+      }
       sleep(500);
     }
   }catch(e){
@@ -78,10 +82,10 @@ export default function Register() {
       </Button>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="cardId">
-          <Form.Label>カードID</Form.Label>
+          <Form.Label>カードIdm</Form.Label>
           <Form.Control
             type="text"
-            placeholder="カードIDを入力してください"
+            placeholder="カードIdmを入力してください"
             value={cardId}
             onChange={(e) => setCardId(e.target.value)}
           />
