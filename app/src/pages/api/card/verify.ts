@@ -34,6 +34,7 @@ export default async function handler(req: any, res: any) {
     res.status(200).json({
       verified: true
     })
+    return
   }
   // return method not allowed
   res.status(405).json({ error: 'Method not allowed' });

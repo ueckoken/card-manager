@@ -17,7 +17,7 @@ const Header: FC<{}> = () => {
               height="30"
               className="d-inline-block align-top"
             />{' '}
-            KokenLdapManager
+            CardManager
           </Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">

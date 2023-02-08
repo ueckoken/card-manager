@@ -1,9 +1,6 @@
-import { signIn } from 'next-auth/react';
-import NextAuth, { Profile, Session, User } from "next-auth";
+import NextAuth, { Session } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import { JWT } from 'next-auth/jwt';
-
-let users;
 
 export default NextAuth({
   secret: process.env.SECRET as string,
@@ -30,7 +27,6 @@ export default NextAuth({
   ],
   callbacks: {
     async jwt({ token, user, profile }) {
-      console.log(profile);
       if (user) {
         token.groups = profile?.groups;
         token.sub = profile?.sub;

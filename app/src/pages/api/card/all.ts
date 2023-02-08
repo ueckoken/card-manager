@@ -18,6 +18,7 @@ export default async function handler(req: any, res: any) {
     }
     const allCards = await prisma.card.findMany();
     res.json(allCards);
+    return
   }
   // return method not allowed
   res.status(405).json({ error: 'Method not allowed' });
