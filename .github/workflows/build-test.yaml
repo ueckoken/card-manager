@@ -1,0 +1,31 @@
+name: Build Test App
+
+defaults:
+  run:
+    working-directory: ./app
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+      - name: set tag
+        run: |-
+          export TIMESTAMP=$(date +%s)
+          export SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          echo "IMAGE_TAG=$SHA-$TIMESTAMP" >> $GITHUB_ENV
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: ./app
+          file: ./app/Dockerfile
+          platforms: linux/amd64
+          push: false
+          tags: ghcr.io/ueckoken/card-manager-app:${{ env.IMAGE_TAG }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
