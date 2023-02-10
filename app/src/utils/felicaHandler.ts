@@ -40,7 +40,7 @@ export async function getIdm(device: any) {
   await receive(device, 13);
   await send(device, [0x00, 0x00, 0xff, 0xff, 0xff, 0x0a, 0x00, 0xf6, 0xd6, 0x04, 0x6e, 0x00, 0x06, 0x00, 0xff, 0xff, 0x01, 0x00, 0xb3, 0x00]);
   await receive(device, 6);
-  let idm = (await receive(device, 37)).slice(17, 24);
+  let idm = (await receive(device, 37)).slice(17, 25);
   if (idm.length > 0) {
     let idmStr = '';
     for (let i = 0; i < idm.length; i++) {
