@@ -1,7 +1,6 @@
 import { JWT } from 'next-auth/jwt';
 import NextAuth, { Session } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
-import { JWT } from 'next-auth/jwt';
 import axios, { AxiosError } from "axios";
 
 const keycloak = KeycloakProvider({
