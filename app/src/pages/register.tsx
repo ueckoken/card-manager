@@ -77,12 +77,13 @@ export default function Register() {
       <p>部室の電子鍵に使用するICカードを管理します</p>
       <Button variant="primary" onClick={toggleConnect}>
         {
-          conncted ? '切断' : '接続'
+          conncted ? 'Pasori切断' : 'Pasori接続'
         }
       </Button>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="cardId">
           <Form.Label>カードIdm</Form.Label>
+          <small>Pasoriを持っていない場合はスマホでIdmを取得できます( <a href="howto" target='_blank'>方法</a> )</small>
           <Form.Control
             type="text"
             placeholder="カードIdmを入力してください"
