@@ -33,7 +33,9 @@ const Header: FC<{}> = () => {
                   </NavDropdown.Item>
                 }
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={()=>signOut()}>
+                <NavDropdown.Item onClick={()=>signOut(
+                  { callbackUrl: "https://card.ueckoken.club"}
+                )}>
                   ログアウト
                 </NavDropdown.Item>
               </NavDropdown>
