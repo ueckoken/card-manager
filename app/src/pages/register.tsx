@@ -82,7 +82,7 @@ export default function Register() {
       </Button>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="cardId">
-          <Form.Label>カードIdm</Form.Label>
+          <Form.Label>カードIdm</Form.Label><br />
           <small>Pasoriを持っていない場合はスマホでIdmを取得できます( <a href="howto" target='_blank'>方法</a> )</small>
           <Form.Control
             type="text"
