@@ -33,9 +33,7 @@ const Header: FC<{}> = () => {
                   </NavDropdown.Item>
                 }
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={()=>signOut({
-                  callbackUrl: "/api/auth/logout"
-                 })}>
+                <NavDropdown.Item onClick={()=>signOut()}>
                   ログアウト
                 </NavDropdown.Item>
               </NavDropdown>
