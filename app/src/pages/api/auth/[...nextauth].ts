@@ -24,21 +24,19 @@ const keycloak = KeycloakProvider({
 })
 
 async function doFinalSignoutHandshake(jwt: JWT) {
-  const { provider, id_token } = jwt;
+  const { id_token } = jwt;
 
-  if (provider == keycloak.id) {
-    try {
-      // Add the id_token_hint to the query string
-      const params = new URLSearchParams();
-      params.append('id_token_hint', id_token);
-      const { status, statusText } = await axios.get(`${keycloak.options?.issuer}/protocol/openid-connect/logout?${params.toString()}`);
+  try {
+    // Add the id_token_hint to the query string
+    const params = new URLSearchParams();
+    params.append('id_token_hint', id_token);
+    const { status, statusText } = await axios.get(`${keycloak.options?.issuer}/protocol/openid-connect/logout?${params.toString()}`);
 
-      // The response body should contain a confirmation that the user has been logged out
-      console.log("Completed post-logout handshake", status, statusText);
-    }
-    catch (e: any) {
-      console.error("Unable to perform post-logout handshake", (e as AxiosError)?.code || e)
-    }
+    // The response body should contain a confirmation that the user has been logged out
+    console.log("Completed post-logout handshake", status, statusText);
+  }
+  catch (e: any) {
+    console.error("Unable to perform post-logout handshake", (e as AxiosError)?.code || e)
   }
 }
 
