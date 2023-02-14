@@ -26,5 +26,7 @@ declare module "next-auth/jwt" {
   interface JWT extends DefaultJWT {
     groups?: string[]
     sub?: string
+    provider: string
+    id_token: string
   }
 }

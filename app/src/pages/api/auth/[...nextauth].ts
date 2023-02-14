@@ -1,35 +1,59 @@
+import { JWT } from 'next-auth/jwt';
 import NextAuth, { Session } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import { JWT } from 'next-auth/jwt';
+import axios, { AxiosError } from "axios";
+
+const keycloak = KeycloakProvider({
+  clientId: process.env.KEYCLOAK_CLIENT_ID as string,
+  clientSecret: process.env.KEYCLOAK_CLIENT_SECRET as string,
+  issuer: process.env.KEYCLOAK_ISSUER as string,
+  authorization: {
+    params: {
+      scope: "openid profile email groups",
+    },
+  },
+  name: "Koken SSO",
+  style: {
+    logo: "../../logo.svg",
+    logoDark: "../../logo.svg",
+    bg: "#ffffff",
+    bgDark: "#ffffff",
+    text: "#000000",
+    textDark: "#000000",
+  }
+})
+
+async function doFinalSignoutHandshake(jwt: JWT) {
+  const { provider, id_token } = jwt;
+
+  if (provider == keycloak.id) {
+    try {
+      // Add the id_token_hint to the query string
+      const params = new URLSearchParams();
+      params.append('id_token_hint', id_token);
+      const { status, statusText } = await axios.get(`${keycloak.options?.issuer}/protocol/openid-connect/logout?${params.toString()}`);
+
+      // The response body should contain a confirmation that the user has been logged out
+      console.log("Completed post-logout handshake", status, statusText);
+    }
+    catch (e: any) {
+      console.error("Unable to perform post-logout handshake", (e as AxiosError)?.code || e)
+    }
+  }
+}
 
 export default NextAuth({
   secret: process.env.SECRET as string,
   providers: [
-    KeycloakProvider({
-      clientId: process.env.KEYCLOAK_CLIENT_ID as string,
-      clientSecret: process.env.KEYCLOAK_CLIENT_SECRET as string,
-      issuer: process.env.KEYCLOAK_ISSUER as string,
-      authorization: {
-        params: {
-          scope: "openid profile email groups",
-        },
-      },
-      name: "Koken SSO",
-      style: {
-        logo: "../../logo.svg",
-        logoDark: "../../logo.svg",
-        bg: "#ffffff",
-        bgDark: "#ffffff",
-        text: "#000000",
-        textDark: "#000000",
-      }
-    })
+    keycloak
   ],
   callbacks: {
-    async jwt({ token, user, profile }) {
+    async jwt({ token, user, account, profile }) {
       if (user) {
         token.groups = profile?.groups;
         token.sub = profile?.sub;
+        token.id_token = account?.id_token as string;
       }
       return token
     },
@@ -38,5 +62,8 @@ export default NextAuth({
       session.user.sub = token.sub
       return session
     }
+  },
+  events: {
+    signOut: ({ session, token }) => doFinalSignoutHandshake(token)
   }
 });
