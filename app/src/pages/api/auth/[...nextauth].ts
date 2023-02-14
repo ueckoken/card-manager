@@ -37,6 +37,6 @@ export default NextAuth({
       session.user.groups = token.groups
       session.user.sub = token.sub
       return session
-    },
+    }
   }
 });
