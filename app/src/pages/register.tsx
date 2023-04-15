@@ -23,8 +23,8 @@ export default function Register() {
         'Content-Type': 'application/json',
       },
       data: {
-        idm: cardId,
-        name: name,
+        "idm": cardId,
+        "name": name
       },
     });
     if (res.status === 200) {
