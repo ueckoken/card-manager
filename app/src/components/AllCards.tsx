@@ -32,7 +32,7 @@ export const AllCards: FC<{}> = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      data: JSON.stringify({ idm })
+      data: { idm }
     });
     if (res.status === 200) {
       const data = await res.data;

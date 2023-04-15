@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { RegisteredCards } from '../components/RegisteredCards';
 import { getIdm } from '@/utils/felicaHandler';
+import axios from 'axios';
 
 export default function Register() {
   const session = useSession();
@@ -14,17 +15,17 @@ export default function Register() {
   const [name, setName] = useState('');
   const [conncted, setConnected] = useState(false);
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const res = await fetch('/api/card/register', {
+    const res = await axios('/api/card/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      data: {
         idm: cardId,
         name: name,
-      }),
+      },
     });
     if (res.status === 200) {
       alert('登録しました');
@@ -39,36 +40,38 @@ export default function Register() {
   }
 
   const toggleConnect = () => {
-    if(!conncted){
+    if (!conncted) {
       handleConnectReader();
-    } 
+    }
   }
 
   const handleConnectReader = async () => {
     //@ts-ignore
-   const device = await navigator.usb.requestDevice({ filters: [
-      { vendorId: 0x054c}
-    ]});
+    const device = await navigator.usb.requestDevice({
+      filters: [
+        { vendorId: 0x054c }
+      ]
+    });
     await device.open();
     setConnected(true);
     await device.selectConfiguration(1);
     await device.claimInterface(0);
     setCardId(await getIdm(device));
-    try{
-    while(true){
-      const idm = await getIdm(device);
-      if(idm!=''){
-        setCardId(idm);
-        device.close();
-        setConnected(false);
-        break;
+    try {
+      while (true) {
+        const idm = await getIdm(device);
+        if (idm != '') {
+          setCardId(idm);
+          device.close();
+          setConnected(false);
+          break;
+        }
+        sleep(500);
       }
-      sleep(500);
+    } catch (e) {
+      console.log(e);
+      await device.close();
     }
-  }catch(e){
-    console.log(e);
-    await device.close();
-  }
   }
 
   return (
