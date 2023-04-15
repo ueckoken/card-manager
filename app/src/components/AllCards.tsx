@@ -1,6 +1,7 @@
 import { Card } from "@prisma/client";
 import { FC, useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
+import axios from "axios";
 
 export const AllCards: FC<{}> = () => {
   // get all cards from /api/card/all
@@ -9,14 +10,14 @@ export const AllCards: FC<{}> = () => {
   const [cards, setCards] = useState([])
   useEffect(() => {
     const fetchCards = async () => {
-      const res = await fetch('/api/card/all', {
+      const res = await axios('/api/card/all', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
       });
       if (res.status === 200) {
-        const data = await res.json();
+        const data = res.data;
         setCards(data);
       } else {
         alert('カードの取得に失敗しました');
