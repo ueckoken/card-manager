@@ -26,6 +26,11 @@ export const RegisteredCards: FC<{}> = () => {
   }, []);
 
   const deleteCard = async (idm: string) => {
+    // check alert by message box
+    if (!confirm('カードを削除しますか？')) {
+      return;
+    }
+
     const res = await axios('/api/card/delete', {
       method: 'DELETE',
       headers: {
