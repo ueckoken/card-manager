@@ -27,15 +27,15 @@ export const AllCards: FC<{}> = () => {
   }, []);
 
   const deleteCard = async (idm: string) => {
-    const res = await fetch('/api/card/delete', {
+    const res = await axios('/api/card/delete', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ idm }),
+      data: JSON.stringify({ idm })
     });
     if (res.status === 200) {
-      const data = await res.json();
+      const data = await res.data;
       setCards(data);
     } else {
       alert('カードの削除に失敗しました');
