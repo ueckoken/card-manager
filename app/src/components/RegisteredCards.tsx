@@ -36,7 +36,7 @@ export const RegisteredCards: FC<{}> = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      data: { idm }
+      data: idm
     });
     if (res.status === 200) {
       const data = await res.data;
