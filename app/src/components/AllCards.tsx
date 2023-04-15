@@ -18,13 +18,13 @@ export const AllCards: FC<{}> = () => {
       if (res.status === 200) {
         const data = await res.json();
         setCards(data);
-      } else{
+      } else {
         alert('カードの取得に失敗しました');
       }
     };
     fetchCards();
   }, []);
-  
+
   const deleteCard = async (idm: string) => {
     const res = await fetch('/api/card/delete', {
       method: 'DELETE',
@@ -57,11 +57,11 @@ export const AllCards: FC<{}> = () => {
         <tbody>
           {cards.map((card: Card) => (
             <tr key={card.idm}>
-              <td>{card.userName.split(' ')[1] +' '+ card.userName.split(' ')[0]}</td>
+              <td>{card.userName.split(' ')[0] + ' ' + card.userName.split(' ')[1]}</td>
               <td>{card.idm}</td>
               <td>{card.name}</td>
-              <td>{card.expiredAt?card.expiredAt?.toDateString():"無期限"}</td>
-              <td><a href="" onClick={()=>deleteCard(card.idm)}>削除</a></td>
+              <td>{card.expiredAt ? card.expiredAt?.toDateString() : "無期限"}</td>
+              <td><a href="" onClick={() => deleteCard(card.idm)}>削除</a></td>
             </tr>
           ))}
         </tbody>
