@@ -11,7 +11,7 @@ export default async function handler(req: any, res: any) {
   // get token from header using nextauth
   console.log(req);
   const session = await getSession({ req });
-  console.log(session);
+  console.log("Session:", session);
   if (!session) {
     res.status(401).json({ error: 'Unauthorized' });
     return;
