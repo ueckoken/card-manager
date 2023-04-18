@@ -3,11 +3,11 @@ import { getSession } from 'next-auth/react';
 
 // get all cards using prisma
 export default async function handler(req: any, res: any) {
-  if (req.method !== 'POST') {
-    // return method not allowed
-    res.status(405).json({ error: 'Method not allowed' });
-    return
-  }
+  // if (req.method !== 'POST') {
+  //   // return method not allowed
+  //   res.status(405).json({ error: 'Method not allowed' });
+  //   return
+  // }
   // get token from header using nextauth
   console.log(req);
   const session = await getSession({ req });
