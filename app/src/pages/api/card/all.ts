@@ -1,5 +1,6 @@
-import { getSession } from 'next-auth/react';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../auth/[...nextauth]';
 
 // get all cards using prisma
 export default async function handler(req: any, res: any) {
@@ -8,7 +9,7 @@ export default async function handler(req: any, res: any) {
     return
   }
   // get token from header using nextauth
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).json({ error: 'Unauthorized' });
     return;
