@@ -22,10 +22,10 @@ export default function Register() {
       headers: {
         'Content-Type': 'application/json',
       },
-      data: JSON.stringify({
+      data: {
         "idm": cardId,
         "name": name
-      }),
+      },
     });
     if (res.status === 200) {
       alert('登録しました');
