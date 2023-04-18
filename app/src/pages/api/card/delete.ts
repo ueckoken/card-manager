@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../auth/[...nextauth]'
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'DELETE') {
@@ -7,7 +8,7 @@ export default async function handler(req: any, res: any) {
     res.status(405).json({ error: 'Method not allowed' });
     return
   }
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(401).json({ error: 'Unauthorized' });
     return;
