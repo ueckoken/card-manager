@@ -18,7 +18,7 @@ export default function Register() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const res = await axios('/api/card/register', {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
