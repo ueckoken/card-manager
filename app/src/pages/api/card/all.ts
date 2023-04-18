@@ -8,6 +8,7 @@ export default async function handler(req: any, res: any) {
     res.status(405).json({ error: 'Method not allowed' });
     return
   }
+  console.log(req);
   // get token from header using nextauth
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
