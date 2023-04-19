@@ -22,6 +22,7 @@ export default async function handler(req: any, res: any) {
     res.status(400).json({ error: 'Bad request' });
     return;
   }
+
   const card = await prisma.card.findUnique({
     where: {
       idm: idm
@@ -31,6 +32,29 @@ export default async function handler(req: any, res: any) {
     res.status(409).json({ error: 'Card already registered' });
     return;
   }
+
+  const userId = req.body.userId;
+  const username = req.body.username;
+  if (userId || username) {
+    // for administor to register a card for other user
+    // only allow to manager group
+    if (!session.user.groups?.includes('/manager')) {
+      res.status(403).json({ error: 'Forbidden' });
+      return;
+    }
+    const newCard = await prisma.card.create({
+      data: {
+        idm: idm,
+        userId: userId,
+        name: name,
+        userName: username,
+      }
+    });
+    res.json(newCard);
+    await prisma.$disconnect();
+    return
+  }
+
   const newCard = await prisma.card.create({
     data: {
       idm: idm,
