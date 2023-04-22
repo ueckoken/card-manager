@@ -17,6 +17,17 @@ export default function Register() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    // Validation
+    if (!(cardId.length === 16 && /^[a-z0-9]+$/.test(cardId))) {
+      alert('カードIdmは16桁の小文字半角英数字で入力してください');
+      return;
+    }
+    if (name.length == 0) {
+      alert('名前を入力してください');
+      return;
+    }
+
     const res = await axios('/api/card/register', {
       method: 'POST',
       headers: {
@@ -89,7 +100,7 @@ export default function Register() {
           <small>Pasoriを持っていない場合はスマホでIdmを取得できます( <a href="howto" target='_blank'>方法</a> )</small>
           <Form.Control
             type="text"
-            placeholder="カードIdmを入力してください"
+            placeholder="カードIdmを入力してください(16桁の小文字半角英数字)"
             value={cardId}
             onChange={(e) => setCardId(e.target.value)}
           />
