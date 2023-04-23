@@ -1,5 +1,5 @@
 import { JWT } from 'next-auth/jwt';
-import NextAuth, { Session } from "next-auth";
+import NextAuth, { NextAuthOptions, Session } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import axios, { AxiosError } from "axios";
 
@@ -40,7 +40,7 @@ async function doFinalSignoutHandshake(jwt: JWT) {
   }
 }
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET as string,
   providers: [
     keycloak
@@ -62,5 +62,8 @@ export default NextAuth({
   },
   events: {
     signOut: ({ session, token }) => doFinalSignoutHandshake(token)
-  }
-});
+  },
+  session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60, }
+}
+
+export default NextAuth(authOptions);

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { RegisteredCards } from '../components/RegisteredCards';
 import { getIdm } from '@/utils/felicaHandler';
+import axios from 'axios';
 
 export default function Register() {
   const session = useSession();
@@ -14,17 +15,28 @@ export default function Register() {
   const [name, setName] = useState('');
   const [conncted, setConnected] = useState(false);
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const res = await fetch('/api/card/register', {
+
+    // Validation
+    if (!(cardId.length === 16 && /^[a-z0-9]+$/.test(cardId))) {
+      alert('カードIdmは16桁の小文字半角英数字で入力してください');
+      return;
+    }
+    if (name.length == 0) {
+      alert('名前を入力してください');
+      return;
+    }
+
+    const res = await axios('/api/card/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        idm: cardId,
-        name: name,
-      }),
+      data: {
+        "idm": cardId,
+        "name": name
+      },
     });
     if (res.status === 200) {
       alert('登録しました');
@@ -39,36 +51,38 @@ export default function Register() {
   }
 
   const toggleConnect = () => {
-    if(!conncted){
+    if (!conncted) {
       handleConnectReader();
-    } 
+    }
   }
 
   const handleConnectReader = async () => {
     //@ts-ignore
-   const device = await navigator.usb.requestDevice({ filters: [
-      { vendorId: 0x054c}
-    ]});
+    const device = await navigator.usb.requestDevice({
+      filters: [
+        { vendorId: 0x054c }
+      ]
+    });
     await device.open();
     setConnected(true);
     await device.selectConfiguration(1);
     await device.claimInterface(0);
     setCardId(await getIdm(device));
-    try{
-    while(true){
-      const idm = await getIdm(device);
-      if(idm!=''){
-        setCardId(idm);
-        device.close();
-        setConnected(false);
-        break;
+    try {
+      while (true) {
+        const idm = await getIdm(device);
+        if (idm != '') {
+          setCardId(idm);
+          device.close();
+          setConnected(false);
+          break;
+        }
+        sleep(500);
       }
-      sleep(500);
+    } catch (e) {
+      console.log(e);
+      await device.close();
     }
-  }catch(e){
-    console.log(e);
-    await device.close();
-  }
   }
 
   return (
@@ -86,7 +100,7 @@ export default function Register() {
           <small>Pasoriを持っていない場合はスマホでIdmを取得できます( <a href="howto" target='_blank'>方法</a> )</small>
           <Form.Control
             type="text"
-            placeholder="カードIdmを入力してください"
+            placeholder="カードIdmを入力してください(16桁の小文字半角英数字)"
             value={cardId}
             onChange={(e) => setCardId(e.target.value)}
           />
