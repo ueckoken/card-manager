@@ -64,7 +64,7 @@ export const RegisteredCards: FC<{}> = () => {
             <tr key={card.idm}>
               <td>{card.idm}</td>
               <td>{card.name}</td>
-              <td><button onClick={() => deleteCard(card.idm)}>削除</button></td>
+              <td><a href="" onClick={() => deleteCard(card.idm)}>削除</a></td>
             </tr>
           ))}
         </tbody>
