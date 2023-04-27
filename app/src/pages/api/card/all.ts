@@ -20,7 +20,11 @@ export default async function handler(req: any, res: any) {
     res.status(403).json({ error: 'Forbidden' });
     return;
   }
-  const allCards = await prisma.card.findMany();
+  const allCards = await prisma.card.findMany({
+    orderBy: {
+      userId: 'asc'
+    }
+  });
   res.json(allCards);
   return
 }
