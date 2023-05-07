@@ -12,6 +12,7 @@ export default async function handler(req: any, res: any) {
     res.status(401).json({ error: 'Unauthorized' });
     return;
   }
+  console.log(req.body);
   const idm = req.body.idm;
   if (!idm) {
     res.status(400).json({ error: 'Bad request' });
