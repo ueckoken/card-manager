@@ -8,4 +8,4 @@ COPY . .
 RUN yarn prisma:generate
 RUN yarn build
 
-CMD [ "node", ".next/standalone/server.js" ]
+CMD [ "yarn", "start" ]
